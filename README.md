@@ -43,11 +43,3 @@ License
 MIT License
 
 Enjoy testing your guessing skills and refining your intuition!
-
-
-
-
-
-
-
-b
