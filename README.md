@@ -1,6 +1,6 @@
 # 🧠 Mini Projects in C++
 
-Welcome to **Mini Projects in C++** — a growing collection of simple to intermediate C++ programs built to strengthen problem-solving, logic, and coding discipline.
+Welcome to **Mini Projects in C++** — a growing collection of simple to biginner to intermediate C++ programs built to strengthen problem-solving, logic, and coding discipline.
 
 👉 Repository: [https://github.com/monkonthehill/mini-projects](https://github.com/monkonthehill/mini-projects)
 
