@@ -1,8 +1,7 @@
 //@monk_from_the_hill
-//this is just my learning project and there might be mistakes and edge cases (like inputting numbers way bigger than normal)
-//its totally handmade within 50mins
-//mini projects --1;
-
+// this is just my learning project and there might be mistakes and edge cases
+// (like inputting numbers way bigger than normal) its totally handmade within
+// 50mins mini projects --1;
 
 #include <cstdlib>
 #include <ctime>
