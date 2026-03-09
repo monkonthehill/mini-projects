@@ -1,3 +1,25 @@
+/*
+    The ai_addr field inside struct addrinfo is a generic pointer (sockaddr*).
+    However, the actual address structure can be different depending on the
+    IP version returned by getaddrinfo().
+
+    If the address family is AF_INET → it means the address is IPv4.
+    In this case, we cast the generic sockaddr pointer to sockaddr_in,
+    which is the structure used for IPv4 addresses. The actual IPv4 address
+    is stored inside the sin_addr field.
+
+    If the address family is AF_INET6 → it means the address is IPv6.
+    Here we cast the pointer to sockaddr_in6, which stores IPv6 addresses.
+    The actual IPv6 address is inside the sin6_addr field.
+
+    The extracted address pointer is stored in 'addr', so it can later be
+    passed to inet_ntop() to convert the binary IP address into a readable
+    string format.
+
+    getaddrinfo() can return multiple results (IPv4 and/or IPv6), so this
+    logic ensures we correctly handle both formats.
+*/
+
 #include <arpa/inet.h>
 #include <cstddef>
 #include <cstring>
