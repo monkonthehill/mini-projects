@@ -1,0 +1,2357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baba Yagga Store — Handcrafted Crochet Art</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+<style>
+/* ===== ROOT & TOKENS ===== */
+:root {
+  --black: #0a0908;
+  --charcoal: #111210;
+  --charcoal-mid: #1a1917;
+  --charcoal-light: #242220;
+  --charcoal-surface: #2e2b28;
+  --bone: #e8e0d5;
+  --cream: #f0ead8;
+  --ivory: #faf5ec;
+  --crimson: #8b1a1a;
+  --crimson-bright: #c0392b;
+  --crimson-glow: #e74c3c;
+  --ember: #d4651a;
+  --ember-soft: #e8853a;
+  --ember-glow: rgba(212,101,26,0.15);
+  --gold: #b8965a;
+  --gold-dim: #7a6035;
+  --muted: #6b6460;
+  --dust: #4a4540;
+  --thread: rgba(232,224,213,0.06);
+  --font-display: 'Cinzel Decorative', serif;
+  --font-title: 'Uncial Antiqua', serif;
+  --font-body: 'Crimson Pro', serif;
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--black);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: none;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ===== CUSTOM CURSOR ===== */
+.cursor {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  pointer-events: none;
+}
+.cursor-dot {
+  width: 8px; height: 8px;
+  background: var(--crimson-glow);
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s ease, background 0.3s;
+  box-shadow: 0 0 10px var(--crimson-glow), 0 0 20px var(--crimson);
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(232,224,213,0.35);
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  transition: transform 0.18s ease, width 0.25s, height 0.25s, border-color 0.3s;
+}
+body.hovering .cursor-ring {
+  width: 52px; height: 52px;
+  border-color: var(--ember-soft);
+}
+body.hovering .cursor-dot {
+  background: var(--ember);
+  box-shadow: 0 0 14px var(--ember), 0 0 28px var(--ember-soft);
+}
+
+/* ===== NOISE OVERLAY ===== */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--crimson); border-radius: 2px; }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: linear-gradient(to bottom, rgba(10,9,8,0.97) 0%, rgba(10,9,8,0) 100%);
+  backdrop-filter: blur(2px);
+}
+.nav-logo {
+  font-family: var(--font-title);
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+}
+.nav-logo span { color: var(--crimson-glow); }
+.nav-links {
+  display: flex; gap: 2.5rem; list-style: none;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.nav-links a {
+  color: var(--muted);
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+  height: 1px; background: var(--crimson); transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+.nav-links a:hover { color: var(--bone); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 70% at 60% 40%, rgba(139,26,26,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 30% 80%, rgba(212,101,26,0.08) 0%, transparent 50%),
+              var(--black);
+}
+
+/* Woven background pattern */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(232,224,213,0.025) 39px, rgba(232,224,213,0.025) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(232,224,213,0.02) 39px, rgba(232,224,213,0.02) 40px);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  padding-top: 6rem;
+}
+
+.hero-text { max-width: 600px; }
+
+.hero-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.hero-eyebrow::before {
+  content: '✦';
+  color: var(--crimson);
+  font-size: 0.6rem;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--ivory);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 60px rgba(139,26,26,0.3);
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--crimson-glow);
+  display: block;
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 2.8rem;
+  line-height: 1.8;
+  max-width: 440px;
+}
+
+.hero-btns { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.9rem 2.2rem;
+  border: 1px solid;
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.35s, box-shadow 0.35s;
+}
+.btn::before {
+  content: ''; position: absolute; inset: 0;
+  transform: translateX(-101%);
+  transition: transform 0.35s ease;
+}
+.btn:hover::before { transform: translateX(0); }
+
+.btn-primary {
+  background: var(--crimson);
+  border-color: var(--crimson);
+  color: var(--ivory);
+}
+.btn-primary::before { background: var(--crimson-bright); }
+.btn-primary:hover { box-shadow: 0 0 30px rgba(192,57,43,0.4); }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--dust);
+  color: var(--muted);
+}
+.btn-outline::before { background: rgba(232,224,213,0.06); }
+.btn-outline:hover { color: var(--bone); border-color: var(--bone); }
+
+/* Hero visual */
+.hero-visual {
+  position: relative; display: flex;
+  justify-content: center; align-items: center;
+}
+
+.hero-frame {
+  position: relative;
+  width: 460px; height: 520px;
+}
+
+.hero-card-main {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 320px; height: 380px;
+  background: var(--charcoal-mid);
+  border: 1px solid var(--charcoal-surface);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 80px rgba(139,26,26,0.15), 0 40px 80px rgba(0,0,0,0.6);
+  animation: floatMain 6s ease-in-out infinite;
+}
+
+.hero-card-side {
+  position: absolute;
+  width: 180px; height: 220px;
+  background: var(--charcoal);
+  border: 1px solid rgba(232,224,213,0.07);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+.hero-card-side.left {
+  bottom: 20px; left: 0;
+  animation: floatSideL 7s ease-in-out infinite 0.5s;
+}
+.hero-card-side.right {
+  bottom: 0; right: 0;
+  animation: floatSideR 8s ease-in-out infinite 1s;
+}
+
+@keyframes floatMain {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-14px); }
+}
+@keyframes floatSideL {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(-1deg); }
+}
+@keyframes floatSideR {
+  0%,100% { transform: translateY(0) rotate(2deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+/* Crochet SVG illustrations inside cards */
+.crochet-art {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 1rem;
+  position: relative;
+}
+.crochet-art svg { width: 80%; height: auto; }
+
+.card-label {
+  position: absolute; bottom: 12px; left: 0; right: 0;
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dust);
+}
+
+/* Glow orb */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(60px);
+}
+.orb-crimson {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(139,26,26,0.25) 0%, transparent 70%);
+  top: -60px; right: -60px;
+}
+.orb-ember {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(212,101,26,0.18) 0%, transparent 70%);
+  bottom: 40px; left: 40px;
+}
+
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute; bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--dust);
+  animation: fadeInUp 1.5s ease 1s both;
+}
+.scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, var(--dust), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%,100% { opacity: 0.4; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ===== SECTION BASE ===== */
+section { position: relative; z-index: 1; }
+
+.section-wrap {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.section-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  color: var(--ivory);
+  line-height: 1.3;
+}
+.section-title span { color: var(--crimson-glow); }
+.section-rule {
+  width: 60px; height: 1px;
+  background: linear-gradient(to right, transparent, var(--crimson), transparent);
+  margin: 1.5rem auto 0;
+}
+.section-sub {
+  max-width: 560px;
+  margin: 1.2rem auto 0;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 1.05rem;
+}
+
+/* Divider */
+.divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(to right, transparent, var(--charcoal-surface), transparent);
+  margin: 0 auto;
+}
+
+/* ===== FEATURED CREATIONS ===== */
+.featured {
+  padding: 7rem 0;
+  background: linear-gradient(to bottom, var(--black), var(--charcoal) 50%, var(--black));
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.product-card {
+  position: relative;
+  background: var(--charcoal-mid);
+  border: 1px solid var(--charcoal-surface);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s;
+  cursor: none;
+}
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(139,26,26,0.15);
+  border-color: rgba(139,26,26,0.4);
+}
+
+.product-thumb {
+  height: 260px;
+  background: var(--charcoal);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.product-thumb::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(10,9,8,0.8));
+}
+.product-thumb svg { width: 65%; height: auto; position: relative; z-index: 1; }
+
+/* Shimmer on hover */
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.03), transparent);
+  transition: left 0.6s ease;
+  z-index: 2;
+}
+.product-card:hover::before { left: 150%; }
+
+.product-info {
+  padding: 1.4rem 1.6rem;
+}
+.product-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+  margin-bottom: 0.5rem;
+}
+.product-name {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  color: var(--cream);
+  margin-bottom: 0.5rem;
+}
+.product-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.product-footer {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.product-price {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--gold);
+}
+.product-btn {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--crimson-glow);
+  border-bottom: 1px solid var(--crimson);
+  padding-bottom: 2px;
+  transition: color 0.3s, letter-spacing 0.3s;
+}
+.product-card:hover .product-btn { color: var(--ember-soft); letter-spacing: 0.28em; }
+
+/* Badge */
+.badge {
+  position: absolute; top: 14px; right: 14px; z-index: 3;
+  background: var(--crimson);
+  color: var(--ivory);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+}
+
+/* ===== COMMISSIONS ===== */
+.commissions {
+  padding: 7rem 0;
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.commissions::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(212,101,26,0.06) 0%, transparent 60%);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+
+.commissions-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.commissions-visual {
+  position: relative;
+}
+
+.comm-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+}
+.comm-card {
+  background: var(--charcoal-mid);
+  border: 1px solid var(--charcoal-surface);
+  padding: 1.5rem;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 150px;
+  transition: border-color 0.3s, transform 0.3s;
+  cursor: none;
+}
+.comm-card:hover {
+  border-color: rgba(212,101,26,0.35);
+  transform: scale(1.02);
+}
+.comm-card:first-child {
+  grid-column: 1 / -1;
+  min-height: 200px;
+}
+.comm-card svg { width: 60%; height: auto; }
+
+.commissions-text { }
+
+.steps-list {
+  list-style: none;
+  margin-top: 2.5rem;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.step {
+  display: flex; gap: 1.4rem; align-items: flex-start;
+}
+.step-num {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--charcoal-surface);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 2.5rem;
+  text-align: right;
+  transition: color 0.3s;
+}
+.step:hover .step-num { color: var(--crimson); }
+.step-body h4 {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  color: var(--cream);
+  margin-bottom: 0.3rem;
+}
+.step-body p {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.commissions-cta { margin-top: 2.5rem; }
+
+/* ===== GALLERY ===== */
+.gallery {
+  padding: 7rem 0;
+  background: var(--charcoal);
+  overflow: hidden;
+}
+
+.gallery-mosaic {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(3, 180px);
+  gap: 0.8rem;
+  margin-top: 3rem;
+}
+
+.gal-item {
+  background: var(--charcoal-mid);
+  border: 1px solid var(--charcoal-surface);
+  overflow: hidden;
+  position: relative;
+  cursor: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.gal-item svg { width: 55%; height: auto; }
+.gal-item:nth-child(1) { grid-column: span 5; grid-row: span 2; }
+.gal-item:nth-child(2) { grid-column: span 4; }
+.gal-item:nth-child(3) { grid-column: span 3; }
+.gal-item:nth-child(4) { grid-column: span 4; grid-row: span 2; }
+.gal-item:nth-child(5) { grid-column: span 3; }
+.gal-item:nth-child(6) { grid-column: span 3; grid-row: span 2; }
+.gal-item:nth-child(7) { grid-column: span 4; }
+.gal-item:nth-child(8) { grid-column: span 5; }
+
+.gal-overlay {
+  position: absolute; inset: 0;
+  background: rgba(10,9,8,0.7);
+  opacity: 0;
+  transition: opacity 0.4s;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 0.5rem;
+}
+.gal-item:hover .gal-overlay { opacity: 1; }
+.gal-overlay-title {
+  font-family: var(--font-title);
+  color: var(--cream);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+}
+.gal-overlay-sub {
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+}
+
+/* Ticker strip */
+.ticker-wrap {
+  overflow: hidden;
+  padding: 1.2rem 0;
+  border-top: 1px solid var(--charcoal-surface);
+  border-bottom: 1px solid var(--charcoal-surface);
+  margin-bottom: 3rem;
+  background: var(--charcoal-mid);
+}
+.ticker-track {
+  display: flex; gap: 3rem;
+  animation: ticker 30s linear infinite;
+  white-space: nowrap;
+}
+.ticker-item {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--dust);
+  flex-shrink: 0;
+}
+.ticker-item span { color: var(--crimson); }
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ===== ABOUT ===== */
+.about {
+  padding: 7rem 0;
+  background: linear-gradient(135deg, var(--black) 0%, var(--charcoal-mid) 50%, var(--black) 100%);
+}
+
+.about-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.about-portrait {
+  position: relative;
+}
+.portrait-frame {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--charcoal-mid);
+  border: 1px solid var(--charcoal-surface);
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.portrait-frame svg { width: 70%; height: auto; }
+
+/* Corner decorations */
+.corner {
+  position: absolute; width: 28px; height: 28px;
+  border-color: var(--gold-dim);
+  border-style: solid;
+}
+.corner-tl { top: -6px; left: -6px; border-width: 1px 0 0 1px; }
+.corner-tr { top: -6px; right: -6px; border-width: 1px 1px 0 0; }
+.corner-bl { bottom: -6px; left: -6px; border-width: 0 0 1px 1px; }
+.corner-br { bottom: -6px; right: -6px; border-width: 0 1px 1px 0; }
+
+.portrait-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 2rem 1.5rem 1.5rem;
+  background: linear-gradient(to top, rgba(10,9,8,0.95), transparent);
+  text-align: center;
+}
+.portrait-name {
+  font-family: var(--font-title);
+  color: var(--cream);
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+.portrait-role {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+}
+
+.about-text { }
+.about-text blockquote {
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--crimson);
+}
+.about-text p {
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+.about-stats {
+  display: flex; gap: 2rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--charcoal-surface);
+}
+.stat { text-align: center; flex: 1; }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--crimson-glow);
+  display: block;
+}
+.stat-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dust);
+  margin-top: 0.3rem;
+}
+
+/* ===== CUSTOMER SHOWCASE ===== */
+.showcase {
+  padding: 7rem 0;
+  background: var(--black);
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.review-card {
+  background: var(--charcoal-mid);
+  border: 1px solid var(--charcoal-surface);
+  padding: 2rem;
+  position: relative;
+  transition: border-color 0.3s, transform 0.3s;
+  cursor: none;
+}
+.review-card:hover {
+  border-color: rgba(139,26,26,0.3);
+  transform: translateY(-4px);
+}
+.review-card::before {
+  content: '"';
+  font-family: var(--font-display);
+  font-size: 5rem;
+  color: var(--charcoal-surface);
+  position: absolute;
+  top: -0.5rem; left: 1rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.review-stars {
+  display: flex; gap: 0.3rem;
+  margin-bottom: 1rem;
+}
+.star { color: var(--gold); font-size: 0.85rem; }
+.review-text {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+.reviewer {
+  display: flex; align-items: center; gap: 0.9rem;
+}
+.reviewer-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--charcoal);
+  border: 1px solid var(--charcoal-surface);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--crimson);
+}
+.reviewer-name {
+  font-family: var(--font-title);
+  color: var(--cream);
+  font-size: 0.9rem;
+}
+.reviewer-handle {
+  font-size: 0.72rem;
+  color: var(--dust);
+  letter-spacing: 0.1em;
+}
+
+/* ===== INSTAGRAM ===== */
+.instagram {
+  padding: 5rem 0;
+  background: var(--charcoal);
+}
+
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+.insta-cell {
+  aspect-ratio: 1;
+  background: var(--charcoal-mid);
+  border: 1px solid var(--charcoal-surface);
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.insta-cell svg { width: 60%; height: auto; }
+.insta-cell-overlay {
+  position: absolute; inset: 0;
+  background: rgba(139,26,26,0.7);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.insta-cell:hover .insta-cell-overlay { opacity: 1; }
+.insta-icon { color: white; font-size: 1.5rem; }
+
+.insta-cta {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+.insta-handle {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+.insta-handle span { color: var(--ember-soft); }
+
+/* ===== CONTACT ===== */
+.contact {
+  padding: 7rem 0;
+  background: linear-gradient(to bottom, var(--black), var(--charcoal-mid));
+  position: relative;
+  overflow: hidden;
+}
+.contact::before {
+  content: '';
+  position: absolute;
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(139,26,26,0.07) 0%, transparent 60%);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+
+.contact-inner {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.form-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dust);
+}
+.form-input, .form-select, .form-textarea {
+  background: var(--charcoal);
+  border: 1px solid var(--charcoal-surface);
+  color: var(--bone);
+  padding: 0.9rem 1.2rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 100%;
+  appearance: none;
+  cursor: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 2px rgba(139,26,26,0.2);
+}
+.form-input::placeholder, .form-textarea::placeholder {
+  color: var(--dust);
+  font-style: italic;
+}
+.form-textarea { resize: vertical; min-height: 130px; }
+.form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6460' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+.form-select option { background: var(--charcoal); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+.contact-info { }
+.contact-info p {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.contact-details { display: flex; flex-direction: column; gap: 1.2rem; }
+.contact-item {
+  display: flex; gap: 1rem; align-items: flex-start;
+}
+.contact-icon {
+  width: 38px; height: 38px;
+  background: var(--charcoal);
+  border: 1px solid var(--charcoal-surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  color: var(--crimson);
+}
+.contact-item-text h5 {
+  font-family: var(--font-title);
+  color: var(--cream);
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+.contact-item-text p {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--black);
+  padding: 3rem 0 2rem;
+  border-top: 1px solid var(--charcoal-surface);
+}
+
+.footer-inner {
+  max-width: 1300px; margin: 0 auto; padding: 0 3rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand .nav-logo { font-size: 1.1rem; margin-bottom: 1rem; display: block; }
+.footer-brand p { font-size: 0.88rem; color: var(--dust); line-height: 1.7; font-style: italic; }
+
+.footer-col h6 {
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+  margin-bottom: 1.2rem;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+.footer-col li a {
+  font-size: 0.88rem;
+  color: var(--dust);
+  transition: color 0.3s;
+}
+.footer-col li a:hover { color: var(--bone); }
+
+.footer-bottom {
+  max-width: 1300px; margin: 0 auto; padding: 1.5rem 3rem 0;
+  border-top: 1px solid var(--charcoal-surface);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.75rem; color: var(--dust); letter-spacing: 0.1em;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 1100px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .reviews-grid { grid-template-columns: 1fr 1fr; }
+  .insta-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+}
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 2rem; }
+  .nav-links { display: none; }
+  .hero-inner { grid-template-columns: 1fr; padding: 2rem; padding-top: 6rem; }
+  .hero-frame { width: 100%; height: 300px; }
+  .hero-card-main { width: 200px; height: 250px; }
+  .hero-card-side.left { width: 120px; height: 150px; }
+  .hero-card-side.right { width: 110px; height: 140px; }
+  .commissions-inner { grid-template-columns: 1fr; }
+  .about-inner { grid-template-columns: 1fr; }
+  .portrait-frame { max-width: 300px; margin: 0 auto; }
+  .contact-inner { grid-template-columns: 1fr; }
+  .gallery-mosaic { grid-template-rows: repeat(4, 160px); }
+  .gal-item:nth-child(1) { grid-column: span 12; grid-row: span 1; }
+  .gal-item:nth-child(2) { grid-column: span 6; }
+  .gal-item:nth-child(3) { grid-column: span 6; }
+  .gal-item:nth-child(4) { grid-column: span 6; grid-row: span 1; }
+  .gal-item:nth-child(5) { grid-column: span 6; }
+  .gal-item:nth-child(6) { grid-column: span 4; grid-row: span 1; }
+  .gal-item:nth-child(7) { grid-column: span 4; }
+  .gal-item:nth-child(8) { grid-column: span 4; }
+}
+
+@media (max-width: 600px) {
+  .hero-title { font-size: 1.8rem; }
+  .section-wrap { padding: 0 1.5rem; }
+  .products-grid { grid-template-columns: 1fr; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .insta-grid { grid-template-columns: repeat(3, 1fr); }
+  .about-stats { flex-wrap: wrap; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  .form-row { grid-template-columns: 1fr; }
+}
+
+/* ===== ENTRY ANIMATIONS ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-in-delay-1 { transition-delay: 0.1s; }
+.fade-in-delay-2 { transition-delay: 0.2s; }
+.fade-in-delay-3 { transition-delay: 0.3s; }
+.fade-in-delay-4 { transition-delay: 0.4s; }
+.fade-in-delay-5 { transition-delay: 0.5s; }
+
+/* Hero own animation */
+.hero-text { animation: heroReveal 1.2s ease both; }
+.hero-visual { animation: heroReveal 1.2s ease 0.3s both; }
+@keyframes heroReveal {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor">
+  <div class="cursor-ring"></div>
+  <div class="cursor-dot"></div>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-logo">Baba <span>Yagga</span> Store</div>
+  <ul class="nav-links">
+    <li><a href="#featured">Collection</a></li>
+    <li><a href="#commissions">Commissions</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#about">Artist</a></li>
+    <li><a href="#contact">Order</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Handcrafted since 2019</p>
+      <h1 class="hero-title">
+        Handcrafted Characters.<br>
+        <em>Woven By Imagination.</em>
+      </h1>
+      <p class="hero-sub">Custom crochet creations, collectibles, keychains, bags and fantasy-inspired handmade art.</p>
+      <div class="hero-btns">
+        <a href="#featured" class="btn btn-primary">Explore Collection</a>
+        <a href="#contact" class="btn btn-outline">Custom Orders</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="glow-orb orb-crimson"></div>
+      <div class="glow-orb orb-ember"></div>
+      <div class="hero-frame">
+        <!-- Main hero card -->
+        <div class="hero-card-main">
+          <div class="crochet-art">
+            <!-- Witch figure SVG -->
+            <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Hat -->
+              <path d="M100 20 L65 80 H135 Z" fill="#1a1917" stroke="#8b1a1a" stroke-width="1.5"/>
+              <rect x="55" y="78" width="90" height="10" rx="2" fill="#242220" stroke="#8b1a1a" stroke-width="1"/>
+              <path d="M95 55 Q100 48 105 55" stroke="#d4651a" stroke-width="1.5" fill="none"/>
+              <!-- Head -->
+              <circle cx="100" cy="110" r="30" fill="#2e2b28" stroke="#6b6460" stroke-width="1.5"/>
+              <!-- Eyes -->
+              <circle cx="90" cy="107" r="5" fill="#8b1a1a"/>
+              <circle cx="110" cy="107" r="5" fill="#8b1a1a"/>
+              <circle cx="92" cy="106" r="2" fill="#e74c3c"/>
+              <circle cx="112" cy="106" r="2" fill="#e74c3c"/>
+              <!-- Smile -->
+              <path d="M89 120 Q100 128 111 120" stroke="#6b6460" stroke-width="1.5" fill="none"/>
+              <!-- Body cape -->
+              <path d="M70 140 Q55 180 45 240 H155 Q145 180 130 140 Z" fill="#1a1917" stroke="#4a4540" stroke-width="1"/>
+              <!-- Cape detail -->
+              <path d="M85 148 Q78 190 72 238" stroke="#2e2b28" stroke-width="1" opacity="0.8"/>
+              <path d="M115 148 Q122 190 128 238" stroke="#2e2b28" stroke-width="1" opacity="0.8"/>
+              <!-- Collar -->
+              <path d="M72 140 Q100 152 128 140" stroke="#8b1a1a" stroke-width="1.5" fill="none"/>
+              <!-- Arms -->
+              <path d="M70 160 Q40 175 35 195" stroke="#2e2b28" stroke-width="8" stroke-linecap="round"/>
+              <path d="M130 160 Q160 175 165 195" stroke="#2e2b28" stroke-width="8" stroke-linecap="round"/>
+              <!-- Hands -->
+              <circle cx="35" cy="197" r="6" fill="#2e2b28" stroke="#4a4540"/>
+              <circle cx="165" cy="197" r="6" fill="#2e2b28" stroke="#4a4540"/>
+              <!-- Wand -->
+              <line x1="165" y1="197" x2="190" y2="165" stroke="#6b6460" stroke-width="2"/>
+              <polygon points="190,155 185,168 195,168" fill="#d4651a"/>
+              <!-- Crochet texture lines -->
+              <path d="M75 160 Q80 165 85 160 Q90 155 95 160 Q100 165 105 160 Q110 155 115 160 Q120 165 125 160" stroke="#4a4540" stroke-width="0.8" fill="none"/>
+              <path d="M73 172 Q79 178 85 172 Q91 166 97 172 Q103 178 109 172 Q115 166 121 172 Q127 178 127 172" stroke="#4a4540" stroke-width="0.8" fill="none"/>
+            </svg>
+            <div class="card-label">The Witch · No. 07</div>
+          </div>
+        </div>
+        <!-- Side card left -->
+        <div class="hero-card-side left">
+          <div class="crochet-art">
+            <svg viewBox="0 0 120 140" fill="none">
+              <!-- Ghost -->
+              <path d="M60 20 Q85 20 90 50 L90 110 Q80 100 70 110 Q60 120 50 110 Q40 100 30 110 L30 50 Q35 20 60 20 Z" fill="#2e2b28" stroke="#4a4540" stroke-width="1.2"/>
+              <circle cx="50" cy="65" r="7" fill="#8b1a1a"/>
+              <circle cx="70" cy="65" r="7" fill="#8b1a1a"/>
+              <circle cx="52" cy="63" r="3" fill="#e74c3c"/>
+              <circle cx="72" cy="63" r="3" fill="#e74c3c"/>
+              <path d="M48 80 Q60 90 72 80" stroke="#6b6460" stroke-width="1.2" fill="none"/>
+              <path d="M35 50 Q40 44 45 50 Q50 56 55 50 Q60 44 65 50 Q70 56 75 50 Q80 44 85 50" stroke="#4a4540" stroke-width="0.8" fill="none"/>
+            </svg>
+            <div class="card-label">Spirit · No. 03</div>
+          </div>
+        </div>
+        <!-- Side card right -->
+        <div class="hero-card-side right">
+          <div class="crochet-art">
+            <svg viewBox="0 0 110 130" fill="none">
+              <!-- Dragon -->
+              <ellipse cx="55" cy="70" rx="30" ry="35" fill="#1a1917" stroke="#4a4540" stroke-width="1"/>
+              <!-- Wings -->
+              <path d="M25 60 Q5 45 8 70 Q12 80 25 75" fill="#2e2b28" stroke="#4a4540" stroke-width="1"/>
+              <path d="M85 60 Q105 45 102 70 Q98 80 85 75" fill="#2e2b28" stroke="#4a4540" stroke-width="1"/>
+              <!-- Head -->
+              <circle cx="55" cy="38" r="18" fill="#242220" stroke="#4a4540" stroke-width="1"/>
+              <!-- Eyes glowing -->
+              <circle cx="48" cy="36" r="4" fill="#d4651a"/>
+              <circle cx="62" cy="36" r="4" fill="#d4651a"/>
+              <circle cx="49" cy="35" r="1.5" fill="#fff"/>
+              <circle cx="63" cy="35" r="1.5" fill="#fff"/>
+              <!-- Horns -->
+              <path d="M44 24 L40 12 L48 20" fill="#8b1a1a"/>
+              <path d="M66 24 L70 12 L62 20" fill="#8b1a1a"/>
+              <!-- Scales texture -->
+              <path d="M38 65 Q43 60 48 65 Q53 70 58 65 Q63 60 68 65 Q73 70 72 75" stroke="#2e2b28" stroke-width="1.2" fill="none"/>
+              <!-- Tail -->
+              <path d="M75 90 Q90 100 88 115 Q86 120 80 118" stroke="#2e2b28" stroke-width="5" stroke-linecap="round" fill="none"/>
+            </svg>
+            <div class="card-label">Dragon · No. 12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- FEATURED CREATIONS -->
+<section class="featured" id="featured">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow">✦ Latest Works ✦</p>
+      <h2 class="section-title">Featured <span>Creations</span></h2>
+      <div class="section-rule"></div>
+      <p class="section-sub">Each piece is hand-stitched, one-of-a-kind, and brought to life from pure yarn and imagination.</p>
+    </div>
+
+    <div class="products-grid">
+      <!-- Card 1 -->
+      <div class="product-card fade-in fade-in-delay-1">
+        <div class="badge">New</div>
+        <div class="product-thumb">
+          <svg viewBox="0 0 200 220" fill="none">
+            <!-- Luna Moth -->
+            <path d="M100 110 Q60 80 30 90 Q10 100 20 130 Q30 155 70 140 Q85 135 100 120 Z" fill="#1a1917" stroke="#4a4540" stroke-width="1.5"/>
+            <path d="M100 110 Q140 80 170 90 Q190 100 180 130 Q170 155 130 140 Q115 135 100 120 Z" fill="#1a1917" stroke="#4a4540" stroke-width="1.5"/>
+            <path d="M100 120 Q80 140 60 165 Q45 180 55 195 Q65 205 85 185 Q95 170 100 155 Z" fill="#242220" stroke="#4a4540" stroke-width="1"/>
+            <path d="M100 120 Q120 140 140 165 Q155 180 145 195 Q135 205 115 185 Q105 170 100 155 Z" fill="#242220" stroke="#4a4540" stroke-width="1"/>
+            <!-- Body -->
+            <rect x="96" y="80" width="8" height="80" rx="4" fill="#2e2b28" stroke="#6b6460" stroke-width="1"/>
+            <!-- Antennae -->
+            <path d="M100 80 Q90 60 78 50" stroke="#4a4540" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M100 80 Q110 60 122 50" stroke="#4a4540" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="78" cy="50" r="3" fill="#8b1a1a"/>
+            <circle cx="122" cy="50" r="3" fill="#8b1a1a"/>
+            <!-- Wing markings crimson -->
+            <circle cx="55" cy="115" r="12" fill="none" stroke="#8b1a1a" stroke-width="1" opacity="0.7"/>
+            <circle cx="55" cy="115" r="5" fill="#8b1a1a" opacity="0.5"/>
+            <circle cx="145" cy="115" r="12" fill="none" stroke="#8b1a1a" stroke-width="1" opacity="0.7"/>
+            <circle cx="145" cy="115" r="5" fill="#8b1a1a" opacity="0.5"/>
+            <!-- Crochet stitch texture -->
+            <path d="M30 105 Q40 100 50 105 Q60 110 70 105 Q80 100 90 105" stroke="#2e2b28" stroke-width="0.8" fill="none"/>
+            <path d="M110 105 Q120 100 130 105 Q140 110 150 105 Q160 100 170 105" stroke="#2e2b28" stroke-width="0.8" fill="none"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <p class="product-tag">Wall Art · Fantasy</p>
+          <h3 class="product-name">Luna Moth Guardian</h3>
+          <p class="product-desc">Soft merino wool, midnight black with crimson eye markings. Approx. 38cm wingspan.</p>
+          <div class="product-footer">
+            <span class="product-price">₹2,400</span>
+            <span class="product-btn">Inquire →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="product-card fade-in fade-in-delay-2">
+        <div class="product-thumb">
+          <svg viewBox="0 0 200 220" fill="none">
+            <!-- Mushroom character -->
+            <!-- Cap -->
+            <path d="M100 40 Q140 40 155 75 Q165 95 155 100 H45 Q35 95 45 75 Q60 40 100 40 Z" fill="#8b1a1a" stroke="#6b1a1a" stroke-width="1.5"/>
+            <!-- Cap spots -->
+            <circle cx="80" cy="68" r="9" fill="#e8e0d5" opacity="0.85"/>
+            <circle cx="115" cy="58" r="7" fill="#e8e0d5" opacity="0.85"/>
+            <circle cx="135" cy="78" r="6" fill="#e8e0d5" opacity="0.7"/>
+            <circle cx="65" cy="82" r="5" fill="#e8e0d5" opacity="0.7"/>
+            <!-- Gills -->
+            <path d="M50 100 Q100 108 150 100" stroke="#742020" stroke-width="1" fill="none"/>
+            <path d="M55 100 L52 115" stroke="#742020" stroke-width="0.8"/>
+            <path d="M70 103 L68 118" stroke="#742020" stroke-width="0.8"/>
+            <path d="M85 105 L84 120" stroke="#742020" stroke-width="0.8"/>
+            <path d="M100 106 L100 121" stroke="#742020" stroke-width="0.8"/>
+            <path d="M115 105 L116 120" stroke="#742020" stroke-width="0.8"/>
+            <path d="M130 103 L132 118" stroke="#742020" stroke-width="0.8"/>
+            <path d="M145 100 L148 115" stroke="#742020" stroke-width="0.8"/>
+            <!-- Stem/Body -->
+            <rect x="75" y="100" width="50" height="65" rx="8" fill="#2e2b28" stroke="#4a4540" stroke-width="1.5"/>
+            <!-- Face -->
+            <circle cx="90" cy="125" r="7" fill="#1a1917"/>
+            <circle cx="110" cy="125" r="7" fill="#1a1917"/>
+            <circle cx="92" cy="123" r="3" fill="#d4651a"/>
+            <circle cx="112" cy="123" r="3" fill="#d4651a"/>
+            <!-- Blush -->
+            <circle cx="82" cy="132" r="5" fill="#8b1a1a" opacity="0.4"/>
+            <circle cx="118" cy="132" r="5" fill="#8b1a1a" opacity="0.4"/>
+            <!-- Smile -->
+            <path d="M88 138 Q100 148 112 138" stroke="#6b6460" stroke-width="1.5" fill="none"/>
+            <!-- Arms -->
+            <path d="M75 115 Q55 112 45 125" stroke="#2e2b28" stroke-width="8" stroke-linecap="round"/>
+            <path d="M125 115 Q145 112 155 125" stroke="#2e2b28" stroke-width="8" stroke-linecap="round"/>
+            <!-- Feet -->
+            <ellipse cx="88" cy="168" rx="10" ry="6" fill="#2e2b28" stroke="#4a4540"/>
+            <ellipse cx="112" cy="168" rx="10" ry="6" fill="#2e2b28" stroke="#4a4540"/>
+            <!-- Stitch texture on body -->
+            <path d="M78 110 Q84 106 90 110 Q96 114 102 110 Q108 106 114 110 Q120 114 122 112" stroke="#4a4540" stroke-width="0.7" fill="none"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <p class="product-tag">Character · Plush</p>
+          <h3 class="product-name">Scarlet Forest Shroom</h3>
+          <p class="product-desc">Chunky cotton blend, 22cm tall. Perfect for your altar, shelf, or a strange gift.</p>
+          <div class="product-footer">
+            <span class="product-price">₹1,600</span>
+            <span class="product-btn">Inquire →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="product-card fade-in fade-in-delay-3">
+        <div class="badge">Sold Out</div>
+        <div class="product-thumb">
+          <svg viewBox="0 0 200 220" fill="none">
+            <!-- Black cat bag charm -->
+            <!-- Body -->
+            <ellipse cx="100" cy="145" rx="40" ry="45" fill="#1a1917" stroke="#2e2b28" stroke-width="1.5"/>
+            <!-- Head -->
+            <circle cx="100" cy="95" r="32" fill="#1a1917" stroke="#2e2b28" stroke-width="1.5"/>
+            <!-- Ears -->
+            <polygon points="75,75 65,50 88,70" fill="#1a1917" stroke="#2e2b28" stroke-width="1"/>
+            <polygon points="125,75 135,50 112,70" fill="#1a1917" stroke="#2e2b28" stroke-width="1"/>
+            <!-- Inner ear -->
+            <polygon points="76,74 69,58 86,70" fill="#8b1a1a" opacity="0.5"/>
+            <polygon points="124,74 131,58 114,70" fill="#8b1a1a" opacity="0.5"/>
+            <!-- Eyes -->
+            <ellipse cx="88" cy="93" rx="8" ry="9" fill="#242220" stroke="#d4651a" stroke-width="1"/>
+            <ellipse cx="112" cy="93" rx="8" ry="9" fill="#242220" stroke="#d4651a" stroke-width="1"/>
+            <circle cx="90" cy="91" r="3" fill="#d4651a"/>
+            <circle cx="114" cy="91" r="3" fill="#d4651a"/>
+            <!-- Nose -->
+            <polygon points="100,103 97,108 103,108" fill="#8b1a1a"/>
+            <!-- Mouth -->
+            <path d="M97 108 Q94 112 90 110" stroke="#4a4540" stroke-width="1.2" fill="none"/>
+            <path d="M103 108 Q106 112 110 110" stroke="#4a4540" stroke-width="1.2" fill="none"/>
+            <!-- Whiskers -->
+            <line x1="75" y1="106" x2="92" y2="108" stroke="#4a4540" stroke-width="0.8"/>
+            <line x1="72" y1="111" x2="90" y2="110" stroke="#4a4540" stroke-width="0.8"/>
+            <line x1="125" y1="106" x2="108" y2="108" stroke="#4a4540" stroke-width="0.8"/>
+            <line x1="128" y1="111" x2="110" y2="110" stroke="#4a4540" stroke-width="0.8"/>
+            <!-- Collar -->
+            <path d="M72 120 Q100 130 128 120" stroke="#8b1a1a" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <circle cx="100" cy="124" r="4" fill="#d4651a"/>
+            <!-- Paws -->
+            <ellipse cx="78" cy="183" rx="14" ry="10" fill="#1a1917" stroke="#2e2b28"/>
+            <ellipse cx="122" cy="183" rx="14" ry="10" fill="#1a1917" stroke="#2e2b28"/>
+            <!-- Tail -->
+            <path d="M140 155 Q165 145 168 165 Q170 180 155 178 Q145 178 140 175" stroke="#1a1917" stroke-width="10" stroke-linecap="round" fill="none"/>
+            <!-- Stitch marks -->
+            <path d="M65 148 Q73 142 81 148 Q89 154 97 148 Q105 142 113 148 Q121 154 129 148 Q135 144 135 148" stroke="#2e2b28" stroke-width="0.8" fill="none"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <p class="product-tag">Keychain · Wearable</p>
+          <h3 class="product-name">Salem — Bag Charm</h3>
+          <p class="product-desc">Mini amigurumi cat, 11cm. Gold bell collar. Ships in a muslin spell pouch.</p>
+          <div class="product-footer">
+            <span class="product-price">₹780</span>
+            <span class="product-btn">Inquire →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="product-card fade-in fade-in-delay-2">
+        <div class="product-thumb">
+          <svg viewBox="0 0 200 220" fill="none">
+            <!-- Celestial bag -->
+            <!-- Bag body -->
+            <path d="M50 100 Q45 170 50 200 H150 Q155 170 150 100 Q145 85 100 82 Q55 85 50 100 Z" fill="#1a1917" stroke="#4a4540" stroke-width="1.5"/>
+            <!-- Bag straps -->
+            <path d="M70 82 Q68 60 72 50 Q80 40 100 40 Q120 40 128 50 Q132 60 130 82" stroke="#2e2b28" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <!-- Moon embroidery -->
+            <path d="M100 130 Q115 118 115 133 Q115 148 100 156 Q90 148 87 133 Q87 118 100 130 Z" fill="#b8965a" opacity="0.7"/>
+            <!-- Stars scattered -->
+            <path d="M70 120 L72 115 L74 120 L79 122 L74 124 L72 129 L70 124 L65 122 Z" fill="#b8965a" opacity="0.6"/>
+            <path d="M140 135 L141.5 131 L143 135 L147 136.5 L143 138 L141.5 142 L140 138 L136 136.5 Z" fill="#b8965a" opacity="0.5"/>
+            <path d="M80 165 L81 162 L82 165 L85 166 L82 167 L81 170 L80 167 L77 166 Z" fill="#b8965a" opacity="0.4"/>
+            <!-- Clasp -->
+            <circle cx="100" cy="100" r="8" fill="#2e2b28" stroke="#b8965a" stroke-width="1.5"/>
+            <circle cx="100" cy="100" r="4" fill="#b8965a" opacity="0.6"/>
+            <!-- Fringe bottom -->
+            <line x1="58" y1="200" x2="55" y2="215" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+            <line x1="68" y1="201" x2="66" y2="216" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+            <line x1="78" y1="202" x2="77" y2="217" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+            <line x1="88" y1="202" x2="88" y2="217" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+            <line x1="100" y1="202" x2="100" y2="217" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+            <line x1="112" y1="202" x2="112" y2="217" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+            <line x1="122" y1="202" x2="123" y2="217" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+            <line x1="132" y1="201" x2="134" y2="216" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+            <line x1="142" y1="200" x2="145" y2="215" stroke="#4a4540" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <p class="product-tag">Bag · Wearable</p>
+          <h3 class="product-name">Celestial Crossbody Bag</h3>
+          <p class="product-desc">Moon &amp; stars crochet crossbody. Fully lined, adjustable strap. Made to order.</p>
+          <div class="product-footer">
+            <span class="product-price">₹3,200</span>
+            <span class="product-btn">Inquire →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="product-card fade-in fade-in-delay-3">
+        <div class="product-thumb">
+          <svg viewBox="0 0 200 220" fill="none">
+            <!-- Skull character -->
+            <!-- Cranium -->
+            <path d="M100 40 Q145 40 155 80 Q160 105 150 115 L50 115 Q40 105 45 80 Q55 40 100 40 Z" fill="#e8e0d5" stroke="#c8bfb0" stroke-width="1.5"/>
+            <!-- Eye sockets -->
+            <ellipse cx="80" cy="88" rx="18" ry="20" fill="#1a1917"/>
+            <ellipse cx="120" cy="88" rx="18" ry="20" fill="#1a1917"/>
+            <!-- Glowing eyes -->
+            <ellipse cx="80" cy="88" rx="10" ry="12" fill="#8b1a1a" opacity="0.7"/>
+            <ellipse cx="120" cy="88" rx="10" ry="12" fill="#8b1a1a" opacity="0.7"/>
+            <circle cx="80" cy="85" r="4" fill="#e74c3c"/>
+            <circle cx="120" cy="85" r="4" fill="#e74c3c"/>
+            <!-- Nose cavity -->
+            <path d="M95 105 L100 115 L105 105 Q100 100 95 105 Z" fill="#c8bfb0"/>
+            <!-- Jaw -->
+            <rect x="62" y="112" width="76" height="40" rx="5" fill="#e8e0d5" stroke="#c8bfb0" stroke-width="1"/>
+            <!-- Teeth -->
+            <rect x="68" y="115" width="10" height="16" rx="2" fill="#1a1917"/>
+            <rect x="82" y="115" width="10" height="18" rx="2" fill="#1a1917"/>
+            <rect x="96" y="115" width="10" height="18" rx="2" fill="#1a1917"/>
+            <rect x="110" y="115" width="10" height="16" rx="2" fill="#1a1917"/>
+            <rect x="124" y="115" width="8" height="14" rx="2" fill="#1a1917"/>
+            <!-- Hair bows -->
+            <path d="M55 55 Q45 48 50 58 Q55 62 65 58 Z" fill="#8b1a1a"/>
+            <path d="M65 58 Q58 52 60 60 L65 58 Z" fill="#742020"/>
+            <!-- Body -->
+            <rect x="72" y="152" width="56" height="50" rx="6" fill="#242220" stroke="#4a4540" stroke-width="1.2"/>
+            <!-- Bow tie -->
+            <path d="M85 153 Q100 158 115 153 Q100 163 85 153 Z" fill="#8b1a1a"/>
+            <circle cx="100" cy="157" r="3" fill="#742020"/>
+            <!-- Stitching on body -->
+            <path d="M75 165 Q82 160 89 165 Q96 170 103 165 Q110 160 117 165 Q124 170 125 165" stroke="#4a4540" stroke-width="0.7" fill="none"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <p class="product-tag">Character · Limited</p>
+          <h3 class="product-name">Rosie — Sugar Skull Doll</h3>
+          <p class="product-desc">Hand-embroidered face, 28cm. Comes in a dark gift box with a wax seal.</p>
+          <div class="product-footer">
+            <span class="product-price">₹2,100</span>
+            <span class="product-btn">Inquire →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="product-card fade-in fade-in-delay-4">
+        <div class="badge">Custom</div>
+        <div class="product-thumb">
+          <svg viewBox="0 0 200 220" fill="none">
+            <!-- Octopus -->
+            <!-- Mantle/Head -->
+            <ellipse cx="100" cy="90" rx="52" ry="55" fill="#2e2b28" stroke="#4a4540" stroke-width="1.5"/>
+            <!-- Eyes -->
+            <circle cx="82" cy="78" r="15" fill="#1a1917" stroke="#4a4540" stroke-width="1"/>
+            <circle cx="118" cy="78" r="15" fill="#1a1917" stroke="#4a4540" stroke-width="1"/>
+            <circle cx="82" cy="78" r="8" fill="#d4651a"/>
+            <circle cx="118" cy="78" r="8" fill="#d4651a"/>
+            <circle cx="84" cy="76" r="3" fill="#fff"/>
+            <circle cx="120" cy="76" r="3" fill="#fff"/>
+            <!-- Tentacles -->
+            <path d="M55 130 Q35 145 30 170 Q28 185 40 188 Q50 190 55 175 Q58 165 65 155" stroke="#2e2b28" stroke-width="10" stroke-linecap="round" fill="none"/>
+            <path d="M65 135 Q50 155 50 180 Q50 195 62 196 Q72 196 73 180 Q73 168 78 158" stroke="#2e2b28" stroke-width="10" stroke-linecap="round" fill="none"/>
+            <path d="M80 138 Q72 162 76 185 Q78 198 90 198 Q100 197 98 182 Q97 168 95 158" stroke="#2e2b28" stroke-width="10" stroke-linecap="round" fill="none"/>
+            <path d="M100 138 Q100 162 104 185 Q106 198 118 198 Q128 197 126 182 Q124 168 120 158" stroke="#2e2b28" stroke-width="10" stroke-linecap="round" fill="none"/>
+            <path d="M118 135 Q130 155 130 180 Q130 195 118 196 Q108 196 107 180 Q107 168 112 158" stroke="#2e2b28" stroke-width="10" stroke-linecap="round" fill="none"/>
+            <path d="M135 130 Q155 145 160 170 Q162 185 150 188 Q140 190 135 175 Q132 165 126 155" stroke="#2e2b28" stroke-width="10" stroke-linecap="round" fill="none"/>
+            <!-- Sucker pattern on tentacles -->
+            <circle cx="37" cy="168" r="3" fill="#4a4540"/>
+            <circle cx="53" cy="178" r="3" fill="#4a4540"/>
+            <circle cx="152" cy="168" r="3" fill="#4a4540"/>
+            <circle cx="158" cy="155" r="2.5" fill="#4a4540"/>
+            <!-- Top texture -->
+            <path d="M58 75 Q68 68 78 75 Q88 82 98 75 Q108 68 118 75 Q128 82 138 75" stroke="#4a4540" stroke-width="0.9" fill="none"/>
+            <path d="M60 90 Q70 83 80 90 Q90 97 100 90 Q110 83 120 90 Q130 97 140 90" stroke="#4a4540" stroke-width="0.9" fill="none"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <p class="product-tag">Character · Fantasy</p>
+          <h3 class="product-name">Abyss — Deep Sea Plush</h3>
+          <p class="product-desc">Six-tentacle amigurumi, ~35cm. Weighted base. Customizable eye colour.</p>
+          <div class="product-footer">
+            <span class="product-price">₹2,800</span>
+            <span class="product-btn">Inquire →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMISSIONS -->
+<section class="commissions" id="commissions">
+  <div class="section-wrap">
+    <div class="commissions-inner">
+      <div class="commissions-visual fade-in">
+        <div class="comm-showcase">
+          <div class="comm-card">
+            <svg viewBox="0 0 240 160" fill="none">
+              <!-- Character design sketch concept -->
+              <circle cx="120" cy="70" r="35" fill="#1a1917" stroke="#4a4540" stroke-width="1.2"/>
+              <!-- Bunny ears -->
+              <path d="M103 40 Q98 15 105 10 Q115 5 118 35" fill="#1a1917" stroke="#4a4540" stroke-width="1"/>
+              <path d="M137 40 Q142 15 135 10 Q125 5 122 35" fill="#1a1917" stroke="#4a4540" stroke-width="1"/>
+              <!-- Inner ear -->
+              <path d="M105 38 Q101 18 106 14 Q113 10 116 34" fill="#8b1a1a" opacity="0.4"/>
+              <path d="M135 38 Q139 18 134 14 Q127 10 124 34" fill="#8b1a1a" opacity="0.4"/>
+              <!-- Eyes -->
+              <circle cx="110" cy="68" r="8" fill="#242220" stroke="#d4651a" stroke-width="1"/>
+              <circle cx="130" cy="68" r="8" fill="#242220" stroke="#d4651a" stroke-width="1"/>
+              <circle cx="112" cy="66" r="3" fill="#d4651a"/>
+              <circle cx="132" cy="66" r="3" fill="#d4651a"/>
+              <!-- Nose + mouth -->
+              <circle cx="120" cy="77" r="3" fill="#8b1a1a"/>
+              <path d="M116 81 Q120 86 124 81" stroke="#6b6460" stroke-width="1.2" fill="none"/>
+              <!-- Body hint -->
+              <path d="M90 105 Q85 130 90 155 H150 Q155 130 150 105 Q145 92 120 90 Q95 92 90 105 Z" fill="#2e2b28" stroke="#4a4540"/>
+              <!-- Wings?? accessory -->
+              <path d="M90 110 Q75 100 68 115 Q65 125 75 128 Q82 130 90 120" fill="#1a1917" stroke="#4a4540"/>
+              <path d="M150 110 Q165 100 172 115 Q175 125 165 128 Q158 130 150 120" fill="#1a1917" stroke="#4a4540"/>
+              <!-- Reference arrows -->
+              <line x1="30" y1="50" x2="60" y2="65" stroke="#4a4540" stroke-width="0.8" stroke-dasharray="3,3"/>
+              <text x="5" y="48" fill="#4a4540" font-size="9" font-family="monospace">ref A</text>
+              <line x1="210" y1="70" x2="180" y2="75" stroke="#4a4540" stroke-width="0.8" stroke-dasharray="3,3"/>
+              <text x="210" y="68" fill="#4a4540" font-size="9" font-family="monospace">ref B</text>
+            </svg>
+          </div>
+          <div class="comm-card">
+            <svg viewBox="0 0 140 140" fill="none">
+              <!-- Yarn ball -->
+              <circle cx="70" cy="70" r="45" fill="#8b1a1a" stroke="#742020" stroke-width="1.5"/>
+              <path d="M35 55 Q55 45 75 55 Q95 65 115 55" stroke="#742020" stroke-width="2" fill="none"/>
+              <path d="M30 70 Q50 60 70 70 Q90 80 110 70" stroke="#742020" stroke-width="2" fill="none"/>
+              <path d="M35 85 Q55 75 75 85 Q95 95 115 85" stroke="#742020" stroke-width="2" fill="none"/>
+              <path d="M50 30 Q60 50 55 70 Q50 90 55 110" stroke="#742020" stroke-width="2" fill="none"/>
+              <path d="M70 25 Q75 45 70 70 Q65 95 70 115" stroke="#742020" stroke-width="2" fill="none"/>
+              <!-- Thread tail -->
+              <path d="M115 55 Q128 40 120 28 Q115 20 108 25" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="comm-card">
+            <svg viewBox="0 0 140 140" fill="none">
+              <!-- Crochet hook -->
+              <rect x="60" y="10" width="18" height="95" rx="9" fill="#2e2b28" stroke="#4a4540" stroke-width="1"/>
+              <!-- Hook end -->
+              <path d="M65 105 Q55 115 55 125 Q55 132 65 132 Q75 132 78 125 Q80 118 72 110" fill="#1a1917" stroke="#4a4540" stroke-width="1.2"/>
+              <!-- Handle decoration rings -->
+              <rect x="60" y="45" width="18" height="5" rx="2" fill="#8b1a1a"/>
+              <rect x="60" y="55" width="18" height="5" rx="2" fill="#8b1a1a"/>
+              <rect x="60" y="65" width="18" height="5" rx="2" fill="#8b1a1a"/>
+              <!-- Yarn loop on hook -->
+              <path d="M55 125 Q42 118 40 105 Q38 90 55 88 Q65 86 70 93" stroke="#d4651a" stroke-width="3" stroke-linecap="round" fill="none"/>
+              <!-- Stars around -->
+              <text x="25" y="50" fill="#b8965a" font-size="12" opacity="0.5">✦</text>
+              <text x="100" y="80" fill="#b8965a" font-size="10" opacity="0.4">✦</text>
+              <text x="15" y="95" fill="#b8965a" font-size="8" opacity="0.3">✦</text>
+            </svg>
+          </div>
+          <div class="comm-card">
+            <svg viewBox="0 0 140 140" fill="none">
+              <!-- Gift/package with bow -->
+              <rect x="25" y="60" width="90" height="65" rx="3" fill="#1a1917" stroke="#4a4540" stroke-width="1.2"/>
+              <!-- Ribbon vertical -->
+              <rect x="62" y="60" width="16" height="65" fill="#8b1a1a" opacity="0.7"/>
+              <!-- Ribbon horizontal -->
+              <rect x="25" y="82" width="90" height="14" fill="#8b1a1a" opacity="0.7"/>
+              <!-- Bow left -->
+              <path d="M70 62 Q50 50 45 62 Q45 72 62 68 Z" fill="#c0392b"/>
+              <!-- Bow right -->
+              <path d="M70 62 Q90 50 95 62 Q95 72 78 68 Z" fill="#c0392b"/>
+              <!-- Bow knot -->
+              <circle cx="70" cy="64" r="7" fill="#e74c3c"/>
+              <!-- Sparkle on box -->
+              <text x="35" y="105" fill="#b8965a" font-size="14" opacity="0.4">✦</text>
+              <text x="88" y="118" fill="#b8965a" font-size="9" opacity="0.3">✦</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="commissions-text fade-in">
+        <p class="section-eyebrow">✦ Bespoke Creations ✦</p>
+        <h2 class="section-title">Custom Character <span>Commissions</span></h2>
+        <div class="section-rule" style="margin:1.5rem 0;"></div>
+        <p style="color:var(--muted); font-style:italic; font-size:1.05rem; line-height:1.8; margin-bottom:1rem;">
+          Got a character you adore? A fictional creature, game avatar, OC, or even a portrait of your pet? I can bring it to life in yarn.
+        </p>
+
+        <ul class="steps-list">
+          <li class="step">
+            <span class="step-num">01</span>
+            <div class="step-body">
+              <h4>Share Your Vision</h4>
+              <p>Send references, sketches, or a description. The more details, the more magical the result.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num">02</span>
+            <div class="step-body">
+              <h4>Quote & Approval</h4>
+              <p>I'll send a quote and estimated timeline. 50% advance confirms your slot.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num">03</span>
+            <div class="step-body">
+              <h4>Crafting & Updates</h4>
+              <p>Progress photos shared as your piece comes together, stitch by stitch.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num">04</span>
+            <div class="step-body">
+              <h4>Delivery</h4>
+              <p>Wrapped in tissue and sealed with wax. Pan-India shipping, worldwide on request.</p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="commissions-cta">
+          <a href="#contact" class="btn btn-primary">Request a Commission</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow">✦ Seen In The Wild ✦</p>
+      <h2 class="section-title">Convention &amp; <span>Exhibition Gallery</span></h2>
+      <div class="section-rule"></div>
+      <p class="section-sub">Spotted at Comic Con, Comicoolz, Pune Otaku Fest, and indie craft markets across India.</p>
+    </div>
+  </div>
+
+  <div style="max-width:1300px; margin:0 auto; padding: 0 3rem;">
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+        <span class="ticker-item">Comic Con India <span>✦</span></span>
+        <span class="ticker-item">Pune Otaku Fest <span>✦</span></span>
+        <span class="ticker-item">Comicoolz Mumbai <span>✦</span></span>
+        <span class="ticker-item">Indie Craft Fair Bangalore <span>✦</span></span>
+        <span class="ticker-item">Horizon Fantasy Con <span>✦</span></span>
+        <span class="ticker-item">Delhi Nerd Night <span>✦</span></span>
+        <span class="ticker-item">Comic Con India <span>✦</span></span>
+        <span class="ticker-item">Pune Otaku Fest <span>✦</span></span>
+        <span class="ticker-item">Comicoolz Mumbai <span>✦</span></span>
+        <span class="ticker-item">Indie Craft Fair Bangalore <span>✦</span></span>
+        <span class="ticker-item">Horizon Fantasy Con <span>✦</span></span>
+        <span class="ticker-item">Delhi Nerd Night <span>✦</span></span>
+      </div>
+    </div>
+
+    <div class="gallery-mosaic">
+      <!-- Cell 1 (large) -->
+      <div class="gal-item">
+        <svg viewBox="0 0 280 320" fill="none" style="width:50%">
+          <!-- Booth setup illustration -->
+          <rect x="20" y="40" width="240" height="260" rx="4" fill="#1a1917" stroke="#2e2b28"/>
+          <!-- Table -->
+          <rect x="10" y="230" width="260" height="15" rx="3" fill="#2e2b28" stroke="#4a4540"/>
+          <rect x="30" y="245" width="10" height="50" fill="#2e2b28"/>
+          <rect x="240" y="245" width="10" height="50" fill="#2e2b28"/>
+          <!-- Display shelf -->
+          <rect x="30" y="150" width="220" height="8" rx="2" fill="#2e2b28"/>
+          <!-- Plushies on shelf -->
+          <circle cx="70" cy="138" r="18" fill="#8b1a1a" stroke="#742020"/>
+          <circle cx="115" cy="140" r="15" fill="#1a1917" stroke="#4a4540"/>
+          <circle cx="155" cy="137" r="18" fill="#2e2b28" stroke="#4a4540"/>
+          <circle cx="198" cy="139" r="16" fill="#8b1a1a" opacity="0.5" stroke="#742020"/>
+          <!-- Items on table -->
+          <rect x="40" y="200" width="35" height="30" rx="3" fill="#2e2b28" stroke="#4a4540"/>
+          <rect x="85" y="195" width="40" height="35" rx="3" fill="#1a1917" stroke="#4a4540"/>
+          <rect x="135" y="200" width="30" height="30" rx="3" fill="#8b1a1a" opacity="0.4"/>
+          <rect x="175" y="198" width="35" height="32" rx="3" fill="#2e2b28" stroke="#4a4540"/>
+          <!-- Banner text effect -->
+          <rect x="40" y="55" width="200" height="35" rx="3" fill="#8b1a1a" opacity="0.3" stroke="#8b1a1a" stroke-width="1"/>
+          <text x="140" y="77" text-anchor="middle" fill="#e8e0d5" font-size="11" font-family="serif" letter-spacing="2">BABA YAGGA</text>
+          <!-- Lights string -->
+          <path d="M30 90 Q70 85 110 92 Q150 99 190 90 Q230 81 260 90" stroke="#b8965a" stroke-width="1" opacity="0.5" fill="none"/>
+          <circle cx="70" cy="87" r="3" fill="#d4651a" opacity="0.7"/>
+          <circle cx="110" cy="93" r="3" fill="#d4651a" opacity="0.7"/>
+          <circle cx="150" cy="96" r="3" fill="#d4651a" opacity="0.7"/>
+          <circle cx="190" cy="91" r="3" fill="#d4651a" opacity="0.7"/>
+        </svg>
+        <div class="gal-overlay">
+          <div class="gal-overlay-title">Comic Con Booth</div>
+          <div class="gal-overlay-sub">Mumbai 2024</div>
+        </div>
+      </div>
+      <!-- Cell 2 -->
+      <div class="gal-item">
+        <svg viewBox="0 0 180 180" fill="none" style="width:60%">
+          <circle cx="90" cy="90" r="65" fill="#1a1917" stroke="#2e2b28"/>
+          <circle cx="75" cy="80" r="18" fill="#8b1a1a" stroke="#742020"/>
+          <circle cx="105" cy="80" r="18" fill="#8b1a1a" stroke="#742020"/>
+          <circle cx="78" cy="77" r="7" fill="#e74c3c"/>
+          <circle cx="108" cy="77" r="7" fill="#e74c3c"/>
+          <path d="M72 100 Q90 112 108 100" stroke="#6b6460" stroke-width="2" fill="none"/>
+          <polygon points="90,50 83,35 97,35" fill="#4a4540"/>
+          <polygon points="78,52 68,38 80,45" fill="#4a4540"/>
+          <polygon points="102,52 112,38 100,45" fill="#4a4540"/>
+        </svg>
+        <div class="gal-overlay">
+          <div class="gal-overlay-title">Fan Favourite</div>
+          <div class="gal-overlay-sub">Crimson Demon Sold Out</div>
+        </div>
+      </div>
+      <!-- Cell 3 -->
+      <div class="gal-item">
+        <svg viewBox="0 0 180 180" fill="none" style="width:60%">
+          <!-- Patchwork bag -->
+          <path d="M40 70 Q38 140 42 170 H138 Q142 140 140 70 Q136 55 90 52 Q44 55 40 70Z" fill="#1a1917" stroke="#4a4540"/>
+          <line x1="90" y1="52" x2="90" y2="170" stroke="#4a4540" stroke-width="1"/>
+          <line x1="40" y1="110" x2="140" y2="110" stroke="#4a4540" stroke-width="1"/>
+          <path d="M55 52 Q53 35 57 28 Q70 20 90 20 Q110 20 123 28 Q127 35 125 52" stroke="#2e2b28" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <!-- Patches -->
+          <rect x="45" y="75" width="40" height="30" rx="2" fill="#8b1a1a" opacity="0.4"/>
+          <rect x="95" y="80" width="38" height="25" rx="2" fill="#2e2b28"/>
+          <circle cx="65" cy="135" r="15" fill="#242220" stroke="#4a4540"/>
+          <circle cx="65" cy="135" r="8" fill="#8b1a1a" opacity="0.5"/>
+          <!-- Star patch -->
+          <text x="98" y="148" fill="#b8965a" font-size="18" opacity="0.6">✦</text>
+        </svg>
+        <div class="gal-overlay">
+          <div class="gal-overlay-title">Patchwork Sling</div>
+          <div class="gal-overlay-sub">Fan Commission</div>
+        </div>
+      </div>
+      <!-- Cell 4 -->
+      <div class="gal-item">
+        <svg viewBox="0 0 180 180" fill="none" style="width:60%">
+          <!-- Frog plush -->
+          <ellipse cx="90" cy="110" rx="45" ry="42" fill="#2e5a2e" stroke="#1e3d1e" stroke-width="1.5"/>
+          <circle cx="70" cy="75" r="20" fill="#2e5a2e" stroke="#1e3d1e" stroke-width="1"/>
+          <circle cx="110" cy="75" r="20" fill="#2e5a2e" stroke="#1e3d1e" stroke-width="1"/>
+          <circle cx="68" cy="70" r="12" fill="#1a1917" stroke="#8b1a1a" stroke-width="1"/>
+          <circle cx="112" cy="70" r="12" fill="#1a1917" stroke="#8b1a1a" stroke-width="1"/>
+          <circle cx="71" cy="68" r="5" fill="#8b1a1a"/>
+          <circle cx="115" cy="68" r="5" fill="#8b1a1a"/>
+          <path d="M72 125 Q90 138 108 125" stroke="#1e3d1e" stroke-width="2" fill="none"/>
+          <!-- Crown accessory -->
+          <path d="M78 78 L82 62 L90 72 L98 58 L106 72 L112 62 L116 78 Z" fill="#b8965a" stroke="#7a6035" stroke-width="1" opacity="0.9"/>
+          <!-- Belly line -->
+          <ellipse cx="90" cy="118" rx="25" ry="20" fill="#3a6e3a" opacity="0.4"/>
+        </svg>
+        <div class="gal-overlay">
+          <div class="gal-overlay-title">Royal Frog Prince</div>
+          <div class="gal-overlay-sub">Gallery Piece</div>
+        </div>
+      </div>
+      <!-- Cell 5 -->
+      <div class="gal-item">
+        <svg viewBox="0 0 180 180" fill="none" style="width:60%">
+          <!-- Keychain display -->
+          <rect x="30" y="25" width="120" height="140" rx="4" fill="#1a1917" stroke="#2e2b28"/>
+          <line x1="90" y1="25" x2="90" y2="165" stroke="#2e2b28" stroke-width="0.5"/>
+          <!-- Keychains hung -->
+          <circle cx="60" cy="22" r="4" fill="#4a4540"/>
+          <line x1="60" y1="26" x2="60" y2="60" stroke="#4a4540" stroke-width="1"/>
+          <circle cx="60" cy="75" r="14" fill="#8b1a1a" stroke="#742020"/>
+          <circle cx="62" cy="73" r="5" fill="#e74c3c"/>
+
+          <circle cx="90" cy="22" r="4" fill="#4a4540"/>
+          <line x1="90" y1="26" x2="90" y2="55" stroke="#4a4540" stroke-width="1"/>
+          <circle cx="90" cy="70" r="14" fill="#2e2b28" stroke="#4a4540"/>
+          <path d="M84 65 L90 58 L96 65 L99 73 L90 78 L81 73 Z" fill="#d4651a" opacity="0.7"/>
+
+          <circle cx="120" cy="22" r="4" fill="#4a4540"/>
+          <line x1="120" y1="26" x2="120" y2="58" stroke="#4a4540" stroke-width="1"/>
+          <circle cx="120" cy="73" r="14" fill="#1a1917" stroke="#8b1a1a"/>
+          <circle cx="120" cy="73" r="7" fill="#8b1a1a" opacity="0.4"/>
+
+          <!-- Bottom row -->
+          <circle cx="50" cy="110" r="12" fill="#2e5a2e" stroke="#1e3d1e"/>
+          <circle cx="78" cy="112" r="12" fill="#8b1a1a" stroke="#742020"/>
+          <circle cx="106" cy="110" r="12" fill="#2e2b28" stroke="#4a4540"/>
+          <circle cx="134" cy="112" r="12" fill="#1a1917" stroke="#6b6460"/>
+
+          <!-- Price tags -->
+          <rect x="38" y="127" width="24" height="12" rx="2" fill="#1a1917" stroke="#4a4540"/>
+          <text x="50" y="136" text-anchor="middle" fill="#6b6460" font-size="6" font-family="monospace">₹380</text>
+        </svg>
+        <div class="gal-overlay">
+          <div class="gal-overlay-title">Keychain Collection</div>
+          <div class="gal-overlay-sub">Otaku Fest 2024</div>
+        </div>
+      </div>
+      <!-- Cell 6 -->
+      <div class="gal-item">
+        <svg viewBox="0 0 180 180" fill="none" style="width:60%">
+          <!-- Crescent wolf -->
+          <path d="M50 90 Q50 40 90 30 Q130 20 140 60 Q150 90 130 115 Q120 130 100 128 Q75 130 60 115 Z" fill="#1a1917" stroke="#2e2b28" stroke-width="1.5"/>
+          <!-- Ears -->
+          <polygon points="70,55 60,32 85,52" fill="#1a1917" stroke="#2e2b28"/>
+          <polygon points="110,55 120,32 95,52" fill="#1a1917" stroke="#2e2b28"/>
+          <polygon points="72,54 65,36 83,51" fill="#4a4540" opacity="0.5"/>
+          <polygon points="108,54 115,36 97,51" fill="#4a4540" opacity="0.5"/>
+          <!-- Eyes -->
+          <circle cx="80" cy="82" r="10" fill="#d4651a"/>
+          <circle cx="110" cy="82" r="10" fill="#d4651a"/>
+          <circle cx="82" cy="80" r="4" fill="#1a1917"/>
+          <circle cx="112" cy="80" r="4" fill="#1a1917"/>
+          <!-- Snout -->
+          <ellipse cx="95" cy="100" rx="18" ry="13" fill="#2e2b28" stroke="#4a4540"/>
+          <ellipse cx="95" cy="96" rx="7" ry="5" fill="#1a1917"/>
+          <path d="M88 103 Q95 110 102 103" stroke="#4a4540" stroke-width="1.5" fill="none"/>
+          <!-- Markings -->
+          <path d="M62 70 Q68 62 74 70" stroke="#4a4540" stroke-width="0.8" fill="none" opacity="0.5"/>
+          <path d="M116 70 Q122 62 128 70" stroke="#4a4540" stroke-width="0.8" fill="none" opacity="0.5"/>
+          <!-- Moon shape behind -->
+          <path d="M145 30 Q160 50 155 75 Q150 95 135 100 Q145 80 143 55 Q141 38 130 25 Q138 22 145 30 Z" fill="#b8965a" opacity="0.15"/>
+        </svg>
+        <div class="gal-overlay">
+          <div class="gal-overlay-title">Moon Wolf</div>
+          <div class="gal-overlay-sub">Convention Special</div>
+        </div>
+      </div>
+      <!-- Cell 7 -->
+      <div class="gal-item">
+        <svg viewBox="0 0 180 180" fill="none" style="width:60%">
+          <!-- Tiny rucksack backpack -->
+          <path d="M45 75 Q42 140 45 165 H135 Q138 140 135 75 Q130 60 90 57 Q50 60 45 75 Z" fill="#1a1917" stroke="#4a4540"/>
+          <!-- Zipper line -->
+          <path d="M50 90 Q90 98 130 90" stroke="#4a4540" stroke-width="2"/>
+          <!-- Small pockets -->
+          <rect x="60" y="100" width="60" height="45" rx="4" fill="#1a1917" stroke="#2e2b28" stroke-width="1.5"/>
+          <!-- Embroidered skull -->
+          <circle cx="90" cy="116" r="10" fill="#e8e0d5" opacity="0.7"/>
+          <circle cx="85" cy="114" r="3" fill="#1a1917"/>
+          <circle cx="95" cy="114" r="3" fill="#1a1917"/>
+          <rect x="84" y="123" width="12" height="8" rx="1" fill="#e8e0d5" opacity="0.6"/>
+          <!-- Straps -->
+          <path d="M65 57 Q62 35 67 25" stroke="#2e2b28" stroke-width="7" stroke-linecap="round"/>
+          <path d="M115 57 Q118 35 113 25" stroke="#2e2b28" stroke-width="7" stroke-linecap="round"/>
+          <path d="M67 25 Q90 18 113 25" stroke="#2e2b28" stroke-width="7" stroke-linecap="round"/>
+          <!-- Keychain dangling -->
+          <line x1="132" y1="100" x2="138" y2="130" stroke="#4a4540" stroke-width="1"/>
+          <circle cx="138" cy="138" r="8" fill="#8b1a1a" stroke="#742020"/>
+        </svg>
+        <div class="gal-overlay">
+          <div class="gal-overlay-title">Skull Backpack</div>
+          <div class="gal-overlay-sub">Wearable Art</div>
+        </div>
+      </div>
+      <!-- Cell 8 -->
+      <div class="gal-item">
+        <svg viewBox="0 0 240 180" fill="none" style="width:70%">
+          <!-- Hands holding crochet work -->
+          <ellipse cx="70" cy="145" rx="35" ry="20" fill="#2e2b28" stroke="#4a4540"/>
+          <ellipse cx="170" cy="145" rx="35" ry="20" fill="#2e2b28" stroke="#4a4540"/>
+          <!-- Fingers suggestion -->
+          <path d="M45 135 Q50 120 55 135" stroke="#4a4540" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M55 130 Q60 115 65 130" stroke="#4a4540" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M65 128 Q70 113 75 128" stroke="#4a4540" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M155 128 Q160 113 165 128" stroke="#4a4540" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M165 130 Q170 115 175 130" stroke="#4a4540" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M175 135 Q180 120 185 135" stroke="#4a4540" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <!-- WIP crochet piece in hands -->
+          <path d="M70 128 Q90 120 120 115 Q150 120 170 128" stroke="#8b1a1a" stroke-width="3" fill="none"/>
+          <path d="M68 118 Q95 105 120 100 Q145 105 172 118" stroke="#8b1a1a" stroke-width="3" fill="none"/>
+          <path d="M70 108 Q100 90 120 85 Q140 90 170 108" stroke="#8b1a1a" stroke-width="2.5" fill="none"/>
+          <!-- Hook in right hand -->
+          <rect x="185" y="85" width="12" height="70" rx="6" fill="#2e2b28" stroke="#4a4540"/>
+          <path d="M186 155 Q178 162 178 170 Q178 177 186 177 Q194 177 196 170 Q198 163 192 158" fill="#1a1917" stroke="#4a4540"/>
+          <rect x="185" y="108" width="12" height="4" rx="2" fill="#8b1a1a"/>
+          <rect x="185" y="116" width="12" height="4" rx="2" fill="#8b1a1a"/>
+        </svg>
+        <div class="gal-overlay">
+          <div class="gal-overlay-title">In Progress</div>
+          <div class="gal-overlay-sub">Studio Snapshot</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT THE ARTIST -->
+<section class="about" id="about">
+  <div class="section-wrap">
+    <div class="about-inner">
+      <div class="about-portrait fade-in">
+        <div class="portrait-frame">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+          <svg viewBox="0 0 280 380" fill="none">
+            <!-- Artist portrait illustration -->
+            <!-- Background aura -->
+            <circle cx="140" cy="150" r="130" fill="none" stroke="rgba(139,26,26,0.08)" stroke-width="40"/>
+            <!-- Hair -->
+            <path d="M70 120 Q60 80 70 50 Q90 15 140 10 Q190 15 210 50 Q220 80 210 120 Q200 150 190 160 Q185 120 180 100 Q170 70 140 65 Q110 70 100 100 Q95 120 90 160 Q80 150 70 120 Z" fill="#1a1917" stroke="#2e2b28"/>
+            <!-- Hair cascading -->
+            <path d="M70 120 Q55 160 50 220 Q48 260 60 290" stroke="#1a1917" stroke-width="18" stroke-linecap="round" fill="none"/>
+            <path d="M210 120 Q225 160 230 220 Q232 260 220 290" stroke="#1a1917" stroke-width="18" stroke-linecap="round" fill="none"/>
+            <!-- Neck -->
+            <rect x="120" y="200" width="40" height="45" rx="8" fill="#3a2e28"/>
+            <!-- Face -->
+            <ellipse cx="140" cy="155" rx="55" ry="60" fill="#3a2e28" stroke="#4a3828"/>
+            <!-- Eyes - dramatic -->
+            <ellipse cx="118" cy="145" rx="14" ry="12" fill="#1a1917"/>
+            <ellipse cx="162" cy="145" rx="14" ry="12" fill="#1a1917"/>
+            <ellipse cx="118" cy="145" rx="9" ry="9" fill="#8b1a1a"/>
+            <ellipse cx="162" cy="145" rx="9" ry="9" fill="#8b1a1a"/>
+            <circle cx="122" cy="142" r="3.5" fill="#fff" opacity="0.8"/>
+            <circle cx="166" cy="142" r="3.5" fill="#fff" opacity="0.8"/>
+            <!-- Eyebrows -->
+            <path d="M105 130 Q118 124 131 130" stroke="#1a1917" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M149 130 Q162 124 175 130" stroke="#1a1917" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <!-- Nose -->
+            <path d="M135 158 Q138 165 145 165 Q148 165 145 158" stroke="#4a3828" stroke-width="1.5" fill="none"/>
+            <!-- Lips -->
+            <path d="M122 178 Q140 190 158 178 Q150 172 140 174 Q130 172 122 178 Z" fill="#8b1a1a"/>
+            <path d="M122 178 Q140 182 158 178" stroke="#742020" stroke-width="1" fill="none"/>
+            <!-- Small nose stud -->
+            <circle cx="147" cy="162" r="2" fill="#b8965a"/>
+            <!-- Hair strand over face -->
+            <path d="M95 80 Q98 130 100 160" stroke="#1a1917" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <!-- Shirt/top -->
+            <path d="M60 290 Q55 340 60 370 H220 Q225 340 220 290 Q210 265 170 255 Q150 250 140 245 Q130 250 110 255 Q70 265 60 290 Z" fill="#1a1917" stroke="#2e2b28"/>
+            <!-- Collar detail -->
+            <path d="M115 245 Q140 260 165 245 Q165 248 140 265 Q115 248 115 245 Z" fill="#2e2b28"/>
+            <!-- Yarn in hands -->
+            <ellipse cx="88" cy="340" rx="22" ry="18" fill="#8b1a1a" stroke="#742020"/>
+            <path d="M75 335 Q85 330 95 335 Q85 340 75 335 Z" stroke="#742020" stroke-width="1" fill="none"/>
+            <!-- Tiny crochet hook -->
+            <rect x="185" y="315" width="8" height="40" rx="4" fill="#2e2b28" stroke="#4a4540"/>
+            <rect x="185" y="332" width="8" height="3" rx="1" fill="#8b1a1a"/>
+          </svg>
+          <div class="portrait-caption">
+            <div class="portrait-name">Yukta — The Maker</div>
+            <div class="portrait-role">Founder & Lead Artisan</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-text fade-in">
+        <p class="section-eyebrow">✦ The Hands Behind The Magic ✦</p>
+        <h2 class="section-title">About <span>The Artist</span></h2>
+        <div class="section-rule" style="margin:1.5rem 0 2rem;"></div>
+
+        <blockquote>
+          "Every stitch is a spell. Every character is a small soul."
+        </blockquote>
+
+        <p>
+          I'm Yukta — a self-taught crochet artist, fantasy nerd, and collector of dark fairy tales. What started as a lockdown hobby became an obsession, and then a calling. Baba Yagga Store was born from my love of anime, gaming, folklore, and the urge to hold the things I love in my hands.
+        </p>
+        <p>
+          I specialize in amigurumi — the Japanese art of crocheting small stuffed characters — with a dark, maximalist twist. Skulls with bows. Witches with attitude. Dragons that glow in the dark. Each piece takes between 4 to 30 hours to complete.
+        </p>
+        <p>
+          I work from a small studio in Shimla, surrounded by yarn, incense, and a frankly irresponsible number of plushies.
+        </p>
+
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-num">400+</span>
+            <div class="stat-label">Pieces Created</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">12</span>
+            <div class="stat-label">Conventions</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">6yr</span>
+            <div class="stat-label">In The Craft</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">98%</span>
+            <div class="stat-label">Happy Collectors</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMER SHOWCASE -->
+<section class="showcase" id="showcase">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow">✦ From The Collectors ✦</p>
+      <h2 class="section-title">Customer <span>Showcase</span></h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card fade-in fade-in-delay-1">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">She made my Howl's Moving Castle OC into the most perfect little plush. The detail on the coat was insane. I cried when it arrived. Worth every rupee.</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">M</div>
+          <div>
+            <div class="reviewer-name">Meera R.</div>
+            <div class="reviewer-handle">@meeradraws — Pune</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card fade-in fade-in-delay-2">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">Got the Salem bag charm at Comic Con and it literally started a conversation at every table I visited. The packaging was a little ritual in itself — wax seal and everything.</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">A</div>
+          <div>
+            <div class="reviewer-name">Arjun K.</div>
+            <div class="reviewer-handle">@arjun_gamerboy — Mumbai</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card fade-in fade-in-delay-3">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">Commissioned a custom Eldritch Horror-themed amigurumi for my DnD table. She nailed the vibe. My entire party was horrified and delighted simultaneously. 10/10.</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">P</div>
+          <div>
+            <div class="reviewer-name">Priya S.</div>
+            <div class="reviewer-handle">@priyarolls20s — Delhi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card fade-in fade-in-delay-2">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">The celestial bag is exactly the kind of thing you carry to a midnight show. People constantly ask where I got it. I refuse to tell them — it's too special.</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">T</div>
+          <div>
+            <div class="reviewer-name">Tanisha V.</div>
+            <div class="reviewer-handle">@tanisha.witchy — Bangalore</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card fade-in fade-in-delay-3">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">My custom portrait doll looks more like me than I do. I am deeply unsettled and in love with it. Outstanding work and she kept me updated every step of the way.</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">K</div>
+          <div>
+            <div class="reviewer-name">Kavya N.</div>
+            <div class="reviewer-handle">@kavyacosplays — Chennai</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card fade-in fade-in-delay-4">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">Bought three keychains at Otaku Fest and went back for two more on the last day. The pricing is genuinely fair for the amount of skill and time that goes into each one.</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">R</div>
+          <div>
+            <div class="reviewer-name">Rahul M.</div>
+            <div class="reviewer-handle">@rm_gaminghub — Hyderabad</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="instagram" id="instagram">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow">✦ Follow The Craft ✦</p>
+      <h2 class="section-title">Instagram <span>Feed</span></h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="insta-grid fade-in">
+      <!-- 6 Instagram cells -->
+      <div class="insta-cell">
+        <svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="35" fill="#8b1a1a" stroke="#742020"/><circle cx="55" cy="55" r="8" fill="#e74c3c"/><circle cx="65" cy="55" r="8" fill="#e74c3c"/><path d="M50 72 Q60 82 70 72" stroke="#4a4540" stroke-width="2" fill="none"/></svg>
+        <div class="insta-cell-overlay"><span class="insta-icon">♡ 842</span></div>
+      </div>
+      <div class="insta-cell">
+        <svg viewBox="0 0 120 120" fill="none"><ellipse cx="60" cy="65" rx="30" ry="33" fill="#1a1917" stroke="#4a4540"/><circle cx="60" cy="48" r="22" fill="#1a1917" stroke="#4a4540"/><polygon points="48,30 42,14 56,26" fill="#1a1917" stroke="#4a4540"/><polygon points="72,30 78,14 64,26" fill="#1a1917" stroke="#4a4540"/><circle cx="52" cy="46" r="6" fill="#d4651a"/><circle cx="68" cy="46" r="6" fill="#d4651a"/></svg>
+        <div class="insta-cell-overlay"><span class="insta-icon">♡ 1.2k</span></div>
+      </div>
+      <div class="insta-cell">
+        <svg viewBox="0 0 120 120" fill="none"><path d="M60 10 Q82 10 88 35 L88 80 Q78 75 68 80 Q60 88 52 80 Q42 75 32 80 L32 35 Q38 10 60 10 Z" fill="#2e2b28" stroke="#4a4540"/><circle cx="48" cy="50" r="8" fill="#8b1a1a"/><circle cx="72" cy="50" r="8" fill="#8b1a1a"/><circle cx="50" cy="48" r="3" fill="#e74c3c"/><circle cx="74" cy="48" r="3" fill="#e74c3c"/></svg>
+        <div class="insta-cell-overlay"><span class="insta-icon">♡ 956</span></div>
+      </div>
+      <div class="insta-cell">
+        <svg viewBox="0 0 120 120" fill="none"><path d="M30 55 Q28 90 30 108 H90 Q92 90 90 55 Q87 44 60 42 Q33 44 30 55 Z" fill="#1a1917" stroke="#4a4540"/><path d="M42 42 Q40 28 44 22 Q54 15 60 15 Q66 15 76 22 Q80 28 78 42" stroke="#2e2b28" stroke-width="6" stroke-linecap="round" fill="none"/><circle cx="60" cy="80" r="14" fill="#b8965a" opacity="0.5" stroke="#b8965a"/><circle cx="60" cy="80" r="7" fill="#b8965a" opacity="0.7"/></svg>
+        <div class="insta-cell-overlay"><span class="insta-icon">♡ 2.3k</span></div>
+      </div>
+      <div class="insta-cell">
+        <svg viewBox="0 0 120 120" fill="none"><ellipse cx="60" cy="75" rx="32" ry="30" fill="#2e5a2e" stroke="#1e3d1e"/><ellipse cx="60" cy="50" rx="22" ry="22" fill="#2e5a2e" stroke="#1e3d1e"/><circle cx="52" cy="46" r="9" fill="#1a1917" stroke="#8b1a1a"/><circle cx="68" cy="46" r="9" fill="#1a1917" stroke="#8b1a1a"/><circle cx="54" cy="44" r="4" fill="#8b1a1a"/><circle cx="70" cy="44" r="4" fill="#8b1a1a"/></svg>
+        <div class="insta-cell-overlay"><span class="insta-icon">♡ 788</span></div>
+      </div>
+      <div class="insta-cell">
+        <svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="45" r="28" fill="#e8e0d5" stroke="#c8bfb0"/><ellipse cx="47" cy="40" rx="10" ry="12" fill="#1a1917"/><ellipse cx="73" cy="40" rx="10" ry="12" fill="#1a1917"/><ellipse cx="47" cy="40" rx="6" ry="8" fill="#8b1a1a"/><ellipse cx="73" cy="40" rx="6" ry="8" fill="#8b1a1a"/><rect x="42" y="68" width="36" height="24" rx="3" fill="#e8e0d5" stroke="#c8bfb0"/><rect x="46" y="68" width="10" height="14" rx="1" fill="#1a1917"/><rect x="59" y="68" width="10" height="16" rx="1" fill="#1a1917"/><rect x="72" y="68" width="5" height="12" rx="1" fill="#1a1917"/></svg>
+        <div class="insta-cell-overlay"><span class="insta-icon">♡ 1.8k</span></div>
+      </div>
+    </div>
+
+    <div class="insta-cta fade-in">
+      <p class="insta-handle"><span>@</span>babayagga.store</p>
+      <a href="#" class="btn btn-outline">Follow on Instagram</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow">✦ Cast Your Request ✦</p>
+      <h2 class="section-title">Custom Orders &amp; <span>Enquiries</span></h2>
+      <div class="section-rule"></div>
+      <p class="section-sub">Commission slots open on the 1st of every month. Fill the form and I'll respond within 48 hours.</p>
+    </div>
+
+    <div class="contact-inner">
+      <div class="contact-form fade-in">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-input" placeholder="Howl Pendragon...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="you@realm.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type of Request</label>
+          <select class="form-select form-input">
+            <option value="" disabled selected>Select a spell...</option>
+            <option>Custom Commission — Character</option>
+            <option>Custom Commission — Bag / Wearable</option>
+            <option>Bulk Order for Convention / Gift</option>
+            <option>Ready Piece Enquiry</option>
+            <option>Collaboration / Exhibition</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Describe Your Vision</label>
+          <textarea class="form-textarea" placeholder="Tell me about the character, colours, size, references... the more detail, the better the magic."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Budget (approx.)</label>
+          <input type="text" class="form-input" placeholder="₹500 – ₹5000">
+        </div>
+        <button type="button" class="btn btn-primary" style="width:100%; justify-content:center;">Send the Scroll ✦</button>
+      </div>
+
+      <div class="contact-info fade-in">
+        <p>Every commission is a collaboration. I want to understand exactly what you're dreaming of — references, vibes, colours, personality quirks. Don't hold back.</p>
+        <p>Turnaround is typically 1–3 weeks depending on complexity. Rush orders available for select cases.</p>
+
+        <div class="contact-details" style="margin-top:2rem;">
+          <div class="contact-item">
+            <div class="contact-icon">✉</div>
+            <div class="contact-item-text">
+              <h5>Email</h5>
+              <p>hello@babayagga.store</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div class="contact-item-text">
+              <h5>Instagram DM</h5>
+              <p>@babayagga.store — fastest response</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div class="contact-item-text">
+              <h5>Ships From</h5>
+              <p>Shimla, Himachal Pradesh — Pan India & International</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">⏳</div>
+            <div class="contact-item-text">
+              <h5>Commission Slots</h5>
+              <p>Open 1st of every month — limited slots per cycle</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Decorative rune-like border box -->
+        <div style="margin-top:2.5rem; padding:1.5rem; border:1px solid var(--charcoal-surface); background:var(--charcoal-mid); position:relative;">
+          <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--charcoal-mid); padding:0 1rem; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--ember-soft);">Artist's Note</div>
+          <p style="font-style:italic; color:var(--muted); font-size:0.95rem; line-height:1.75; text-align:center;">
+            "I put my whole self into every creation. Please treat these pieces with the love they were made with. They're not mass-produced — they're handmade souls."
+          </p>
+          <p style="text-align:center; color:var(--dust); font-size:0.8rem; margin-top:0.8rem;">— Yukta, Baba Yagga Store</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="nav-logo">Baba <span style="color:var(--crimson-glow)">Yagga</span> Store</span>
+      <p>Handcrafted crochet art from the hills of Himachal. Each piece a spell, each stitch a story. Available for custom commissions, exhibitions, and collaborations.</p>
+    </div>
+    <div class="footer-col">
+      <h6>Navigate</h6>
+      <ul>
+        <li><a href="#featured">Collection</a></li>
+        <li><a href="#commissions">Commissions</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>Craft</h6>
+      <ul>
+        <li><a href="#">Amigurumi</a></li>
+        <li><a href="#">Bags & Wearables</a></li>
+        <li><a href="#">Keychains</a></li>
+        <li><a href="#">Wall Art</a></li>
+        <li><a href="#">Custom Portraits</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>Connect</h6>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Pinterest</a></li>
+        <li><a href="#">Etsy Store</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom" style="max-width:1300px; margin:0 auto; padding:1.5rem 3rem 0;">
+    <span>© 2026 Baba Yagga Store. All rights reserved.</span>
+    <span style="color:var(--charcoal-surface)">✦</span>
+    <span>Made with yarn, magic & 2am focus.</span>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+  // Custom cursor
+  const cursor = document.querySelector('.cursor');
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.left = mouseX + 'px';
+    dot.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Hover effect on interactive elements
+  const hoverEls = document.querySelectorAll('a, button, .product-card, .review-card, .gal-item, .insta-cell, .comm-card');
+  hoverEls.forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+  });
+
+  // Intersection observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Nav scroll effect
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      nav.style.background = 'rgba(10,9,8,0.97)';
+      nav.style.backdropFilter = 'blur(12px)';
+      nav.style.borderBottom = '1px solid var(--charcoal-surface)';
+    } else {
+      nav.style.background = 'linear-gradient(to bottom, rgba(10,9,8,0.97) 0%, rgba(10,9,8,0) 100%)';
+      nav.style.backdropFilter = 'blur(2px)';
+      nav.style.borderBottom = 'none';
+    }
+  });
+
+  // Smooth active nav link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 200) current = sec.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === '#' + current ? 'var(--bone)' : '';
+    });
+  });
+
+  // Hide cursor when leaving window
+  document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+</script>
+</body>
+</html>
